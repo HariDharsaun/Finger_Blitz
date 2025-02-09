@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,43 +12,80 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: AboutPage(),
+       debugShowCheckedModeBanner: false,
+      home: HomePage(),
     );
   }
 }
 
-class AboutPage extends StatelessWidget{
-  const AboutPage({super.key});
-  @override
-  Widget build(BuildContext context)
-  {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w600,color: Colors.deepOrangeAccent),)),
-      ),
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          child:Column(
-            children: [
-              Text("Get ready for a thrilling two-player color battle! Player 1 is Blue, and Player 2 is Red. Tap your color as fast as you can to fill the screen. The first to cover the entire page wins!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
-              Text("How to Play",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-              Text("1.Both players tap Start to begin.",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
-              Text("2.Tap your color area quickly to spread it.",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
-              Text("3.The fastest tapper fills the screen and wins!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class AboutPage extends StatelessWidget{
+//   const AboutPage({super.key});
+//   @override
+//   Widget build(BuildContext context)
+//   {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       appBar: AppBar(
+//         backgroundColor: Colors.yellow,
+//         title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w600,color: Colors.deepOrangeAccent),)),
+//       ),
+//       body: Center(
+//         child: Container(
+//           padding: EdgeInsets.all(20),
+//           width: MediaQuery.of(context).size.width,
+//           height: MediaQuery.of(context).size.height,
+//           decoration: BoxDecoration(
+//             color: Colors.limeAccent,
+//           ),
+//           child:Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               InkWell(
+//                 onTap: (){
+//                   Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
+//                 },
+//                 child: Container(
+//                   width: 150,
+//                   height: 50,
+//                   alignment: Alignment.center,
+//                   decoration: BoxDecoration(
+//                     color: Colors.amberAccent,
+//                     borderRadius: BorderRadius.circular(50),
+//                   ),
+//                   child: Text("Click here to Play!",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600,color: Colors.redAccent),),
+//                 ),
+//               ),
+//               Container(
+//                 padding: EdgeInsets.all(15),
+//                 margin: EdgeInsets.all(30),
+//                 decoration: BoxDecoration(
+//                   color: Colors.amberAccent,
+//                   borderRadius: BorderRadius.circular(30)
+//                 ),
+//                 child: Text("Get ready for a thrilling two-player color battle! Player 1 is Blue, and Player 2 is Red. Tap your color as fast as you can to fill the screen. The first to cover the entire page wins!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400))),
+//               Container(
+//                 padding: EdgeInsets.all(15),
+//                 margin: EdgeInsets.all(10),
+//                 decoration: BoxDecoration(
+//                   color: Colors.amberAccent,
+//                   borderRadius: BorderRadius.circular(30),
+//                 ),
+//                 child: Column(
+//                   children: [
+//                     Text("How to Play",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+//                     Text("1.Both players tap Start to begin.",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
+//                     Text("2.Tap your color area quickly to spread it.",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
+//                     Text("3.The fastest tapper fills the screen and wins!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
+//                   ],
+//                 ),
+//                 ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -62,18 +101,22 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: const Color.fromARGB(255, 254, 199, 0)),)),
+      ),
       body: Column(
         children: [
           Container(
             color: Colors.blue,
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height / 2-57,
             child: Center(
               child: MaterialButton(
                 onPressed: () {
                   p1_start = true;
                   setState(() {
-                    button_color1 = Colors.green;
+                    button_color1 = const Color.fromARGB(255, 236, 249, 118);;
                   });
                   if(p1_start && p2_start)
                   {
@@ -85,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                     });
                     Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => GamePage(p1_start,p2_start)),
+                    MaterialPageRoute(builder: (context) => TimerPage()),
                     );
                   }
                 },
@@ -106,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   p2_start  = true;
                   setState(() {
-                    button_color2 = Colors.green;
+                    button_color2 = const Color.fromARGB(255, 236, 249, 118);;
                   });
                   if(p1_start && p2_start)
                   {
@@ -118,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     });
                     Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => GamePage(p1_start,p2_start)),
+                    MaterialPageRoute(builder: (context) => TimerPage()),
                     );
                   }
                 },
@@ -137,9 +180,6 @@ class _HomePageState extends State<HomePage> {
 }
 
 class GamePage extends StatefulWidget {
-  bool p1_start;
-  bool p2_start;
-  GamePage(this.p1_start,this.p2_start);
   @override
   State<GamePage> createState() => _GamePageState();
 }
@@ -184,7 +224,7 @@ class _GamePageState extends State<GamePage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text("Player 1",style: TextStyle(fontSize: 25),)
+                    child: Text("Player-1",style: TextStyle(fontSize: 25),)
                     ),
                   Text(p1_score.toString(),style: TextStyle(fontSize: 30))
                 ],
@@ -212,11 +252,10 @@ class _GamePageState extends State<GamePage> {
               height: p2_height,
               alignment: Alignment.bottomRight,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Text("Player 2",style: TextStyle(fontSize: 25),)
-                    ),
-                  Text(p2_score.toString(),style: TextStyle(fontSize: 30))
+                  Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: TextStyle(fontSize: 30),)),
+                  Transform.rotate(angle: 3.14,child: Text("Player-2",style: TextStyle(fontSize: 25)))
                 ],
               ),
             ),
@@ -227,6 +266,45 @@ class _GamePageState extends State<GamePage> {
   }
 }
 
+class TimerPage extends StatefulWidget{
+
+  const TimerPage({super.key});
+  @override
+  State<TimerPage> createState() => _TimerPageState();
+}
+
+class _TimerPageState extends State<TimerPage> {
+  int timeleft = 3;
+
+  void initState(){
+    Timer.periodic(Duration(seconds: 1), (timer){
+      if(timeleft > 0)
+      {
+        setState(() {
+          timeleft--;
+        });
+      }
+      else{
+        timer.cancel();
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePage()));
+      }
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blueGrey,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(timeleft.toString(),style: TextStyle(color: Colors.white,fontSize: 100),),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class WinningPage extends StatelessWidget{
   String player = "";
@@ -248,6 +326,7 @@ class WinningPage extends StatelessWidget{
               padding: const EdgeInsets.all(10),
               child: MaterialButton(
                 onPressed: (){
+                Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
