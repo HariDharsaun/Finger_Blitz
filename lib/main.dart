@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: const Color.fromARGB(255, 254, 199, 0)),)),
+        title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: Colors.limeAccent),)),
       ),
       body: Column(
         children: [
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 },
-                child: const Text("Start"),
+                child: const Text("Start",style: TextStyle(color: Colors.blue,fontSize: 20,fontWeight: FontWeight.bold),),
                 color: button_color1,
                 shape: const CircleBorder(),
                 height: 150,
@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 },
-                child: const Text("Start"),
+                child: const Text("Start",style: TextStyle(color: Colors.red,fontSize: 20,fontWeight: FontWeight.bold)),
                 color: button_color2,
                 shape: const CircleBorder(),
                 height: 150,
@@ -275,13 +275,25 @@ class TimerPage extends StatefulWidget{
 
 class _TimerPageState extends State<TimerPage> {
   int timeleft = 3;
-
+  Color bg = Colors.blueAccent;
   void initState(){
     Timer.periodic(Duration(seconds: 1), (timer){
       if(timeleft > 0)
       {
         setState(() {
           timeleft--;
+          if(timeleft == 2)
+          {
+            bg = Colors.red;
+          }
+          if(timeleft == 1)
+          {
+            bg = Colors.orangeAccent;
+          }
+          if(timeleft == 0)
+          {
+            bg = Colors.green;
+          }
         });
       }
       else{
@@ -293,12 +305,12 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: bg,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(timeleft.toString(),style: TextStyle(color: Colors.white,fontSize: 100),),
+            Text((timeleft.toString()) == '0'?"Let's Battle":timeleft.toString(),style: TextStyle(color: Colors.white,fontSize: 60),),
           ],
         ),
       ),
