@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,74 +19,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-// class AboutPage extends StatelessWidget{
-//   const AboutPage({super.key});
-//   @override
-//   Widget build(BuildContext context)
-//   {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         backgroundColor: Colors.yellow,
-//         title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w600,color: Colors.deepOrangeAccent),)),
-//       ),
-//       body: Center(
-//         child: Container(
-//           padding: EdgeInsets.all(20),
-//           width: MediaQuery.of(context).size.width,
-//           height: MediaQuery.of(context).size.height,
-//           decoration: BoxDecoration(
-//             color: Colors.limeAccent,
-//           ),
-//           child:Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               InkWell(
-//                 onTap: (){
-//                   Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
-//                 },
-//                 child: Container(
-//                   width: 150,
-//                   height: 50,
-//                   alignment: Alignment.center,
-//                   decoration: BoxDecoration(
-//                     color: Colors.amberAccent,
-//                     borderRadius: BorderRadius.circular(50),
-//                   ),
-//                   child: Text("Click here to Play!",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600,color: Colors.redAccent),),
-//                 ),
-//               ),
-//               Container(
-//                 padding: EdgeInsets.all(15),
-//                 margin: EdgeInsets.all(30),
-//                 decoration: BoxDecoration(
-//                   color: Colors.amberAccent,
-//                   borderRadius: BorderRadius.circular(30)
-//                 ),
-//                 child: Text("Get ready for a thrilling two-player color battle! Player 1 is Blue, and Player 2 is Red. Tap your color as fast as you can to fill the screen. The first to cover the entire page wins!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400))),
-//               Container(
-//                 padding: EdgeInsets.all(15),
-//                 margin: EdgeInsets.all(10),
-//                 decoration: BoxDecoration(
-//                   color: Colors.amberAccent,
-//                   borderRadius: BorderRadius.circular(30),
-//                 ),
-//                 child: Column(
-//                   children: [
-//                     Text("How to Play",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-//                     Text("1.Both players tap Start to begin.",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
-//                     Text("2.Tap your color area quickly to spread it.",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
-//                     Text("3.The fastest tapper fills the screen and wins!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400)),
-//                   ],
-//                 ),
-//                 ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -98,12 +32,13 @@ class _HomePageState extends State<HomePage> {
   Color button_color2 = Colors.white70;
   bool p1_start = false;
   bool p2_start = false;
+  List<String> colours= ["DEFAULT","GREEN","YELLOW","BROWN"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w700,color: Colors.limeAccent),)),
+        backgroundColor: const Color.fromARGB(255, 138, 177, 196), 
+        title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 252, 203, 140)),)),
       ),
       body: Column(
         children: [
@@ -331,11 +266,20 @@ class WinningPage extends StatelessWidget{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Winner",style: TextStyle(fontSize: 50,fontWeight:FontWeight.bold)),
-            Text((player == "1")?"Player-1":"Player-2",style: const TextStyle(fontSize: 40),),
-            Text("Score : $score",style: const TextStyle(fontSize: 25),),
+            Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Lottie.asset(
+                  'assets/winning.json',
+                  ),
+                  Text("You Won",style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),)
+                ],
+              ),
+            ),
+            Text("Score : $score",style: const TextStyle(fontSize: 30,fontWeight: FontWeight.w400),),
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(15),
               child: MaterialButton(
                 onPressed: (){
                 Navigator.pop(context);
