@@ -28,84 +28,147 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Color> colours= [Colors.amber,Colors.green,Colors.pinkAccent,Colors.blue,Colors.red,Colors.black,Colors.purpleAccent,Colors.deepPurple];
   Color button_color1 = Colors.white70;
   Color button_color2 = Colors.white70;
   bool p1_start = false;
   bool p2_start = false;
-  List<String> colours= ["DEFAULT","GREEN","YELLOW","BROWN"];
+  Color selected = Colors.white;
+  Color p1_color = Colors.blue;
+  Color p2_color = Colors.red;
+  Color palatte_color = Colors.white;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 138, 177, 196), 
-        title: SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 252, 203, 140)),)),
+        backgroundColor: const Color.fromARGB(255, 65, 122, 151), 
+        title:const  SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 252, 203, 140)),)),
+        
       ),
       body: Column(
         children: [
           Container(
-            color: Colors.blue,
+            color: p1_color,
             width: double.infinity,
             height: MediaQuery.of(context).size.height / 2-57,
             child: Center(
-              child: MaterialButton(
-                onPressed: () {
-                  p1_start = true;
-                  setState(() {
-                    button_color1 = const Color.fromARGB(255, 236, 249, 118);;
-                  });
-                  if(p1_start && p2_start)
-                  {
-                    p1_start = false;
-                    p2_start = false;
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  PopupMenuButton<Color>(
+                  icon: Icon(Icons.color_lens_rounded,color: palatte_color,size:35,),
+                  onSelected: (Color color){
                     setState(() {
-                      button_color1 = Colors.white70;
-                      button_color2 = Colors.white70;
+                      if(color != p2_color)
+                      {
+                        p1_color = color;
+                      }
                     });
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TimerPage()),
-                    );
-                  }
-                },
-                child: const Text("Start",style: TextStyle(color: Colors.blue,fontSize: 20,fontWeight: FontWeight.bold),),
-                color: button_color1,
-                shape: const CircleBorder(),
-                height: 150,
-                minWidth: 150,
+                  },
+                  itemBuilder: (BuildContext context){
+                    return colours.map((Color colour)
+                    {
+                      return PopupMenuItem<Color>(
+                        value: colour,
+                        child: Container(
+                          width: double.infinity,
+                          height: 20,
+                          color: colour,
+                        )
+                        );
+                    }).toList();
+                  },
+                ),
+                  MaterialButton(
+                  onPressed: () {
+                    p1_start = true;
+                    setState(() {
+                      button_color1 = Colors.amber;
+                    });
+                    if(p1_start && p2_start)
+                    {
+                      p1_start = false;
+                      p2_start = false;
+                      setState(() {
+                        button_color1 = Colors.white70;
+                        button_color2 = Colors.white70;
+                      });
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TimerPage(color1: p1_color,color2: p2_color)),
+                      );
+                    }
+                  },
+                  child: Text("Start",style: TextStyle(color: p1_color,fontSize: 20,fontWeight: FontWeight.bold),),
+                  color: button_color1,
+                  shape: const CircleBorder(),
+                  height: 150,
+                  minWidth: 150,
+                ),
+                ]
               ),
             ),
           ),
           Container(
-            color: Colors.red,
+            color: p2_color,
             width: double.infinity,
             height: MediaQuery.of(context).size.height / 2,
             child: Center(
-              child: MaterialButton(
-                onPressed: () {
-                  p2_start  = true;
-                  setState(() {
-                    button_color2 = const Color.fromARGB(255, 236, 249, 118);;
-                  });
-                  if(p1_start && p2_start)
-                  {
-                    p1_start = false;
-                    p2_start = false;
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [MaterialButton(
+                  onPressed: () {
+                    p2_start  = true;
                     setState(() {
-                      button_color1 = Colors.white70;
-                      button_color2 = Colors.white70;
+                      button_color2 = Colors.blueGrey;
                     });
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => TimerPage()),
-                    );
-                  }
-                },
-                child: const Text("Start",style: TextStyle(color: Colors.red,fontSize: 20,fontWeight: FontWeight.bold)),
-                color: button_color2,
-                shape: const CircleBorder(),
-                height: 150,
-                minWidth: 150,
+                    if(p1_start && p2_start)
+                    {
+                      p1_start = false;
+                      p2_start = false;
+                      setState(() {
+                        button_color1 = Colors.white70;
+                        button_color2 = Colors.white70;
+                      });
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TimerPage(color1: p1_color,color2: p2_color,)),
+                      );
+                    }
+                  },
+                  child: Text("Start",style: TextStyle(color: p2_color,fontSize: 20,fontWeight: FontWeight.bold)),
+                  color: button_color2,
+                  shape: const CircleBorder(),
+                  height: 150,
+                  minWidth: 150,
+                ),
+                PopupMenuButton<Color>(
+                  icon: Icon(Icons.color_lens_rounded,color: palatte_color,size:35,),
+                  onSelected: (Color color){
+                    setState(() {
+                      if(color != p1_color)
+                      {
+                        p2_color = color;
+                      }
+                    });
+                  },
+                  itemBuilder: (BuildContext context){
+                    return colours.map((Color colour)
+                    {
+                      return PopupMenuItem<Color>(
+                        value: colour,
+                        child: Container(
+                          width: double.infinity,
+                          height: 20,
+                          color: colour,
+                        )
+                        );
+                    }).toList();
+                  },
+                ),
+                ]
               ),
+              
             ),
           ),
         ],
@@ -115,6 +178,9 @@ class _HomePageState extends State<HomePage> {
 }
 
 class GamePage extends StatefulWidget {
+  final Color c1;
+  final Color c2;
+  const GamePage({super.key, required this.c1,required this.c2});
   @override
   State<GamePage> createState() => _GamePageState();
 }
@@ -147,12 +213,12 @@ class _GamePageState extends State<GamePage> {
               });
               if(p1_height > MediaQuery.of(context).size.height-60)
                 {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score,widget.c1,widget.c2)));
                 }
             },
             child: Container(
               padding: EdgeInsets.all(10),
-              color: Colors.blue,
+              color: widget.c1,
               width: double.infinity,
               height: p1_height,
               alignment: Alignment.topRight,
@@ -177,12 +243,12 @@ class _GamePageState extends State<GamePage> {
                 });
                 if(p2_height > MediaQuery.of(context).size.height-60)
                 {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score,widget.c1,widget.c2)));
                 }
             },
             child: Container(
               padding: EdgeInsets.all(10),
-              color: Colors.red,
+              color: widget.c2,
               width: double.infinity,
               height: p2_height,
               alignment: Alignment.bottomRight,
@@ -202,15 +268,16 @@ class _GamePageState extends State<GamePage> {
 }
 
 class TimerPage extends StatefulWidget{
-
-  const TimerPage({super.key});
+  final Color color1;
+  final Color color2;
+  const TimerPage( {super.key,required this.color1,required this.color2});
   @override
   State<TimerPage> createState() => _TimerPageState();
 }
 
 class _TimerPageState extends State<TimerPage> {
   int timeleft = 3;
-  Color bg = Colors.blueAccent;
+  Color bg = Colors.cyanAccent;
   void initState(){
     Timer.periodic(Duration(seconds: 1), (timer){
       if(timeleft > 0)
@@ -219,13 +286,13 @@ class _TimerPageState extends State<TimerPage> {
           timeleft--;
           if(timeleft == 2)
           {
-            bg = Colors.red;
+            bg = widget.color1;
           }
-          if(timeleft == 1)
+          else if(timeleft == 1)
           {
-            bg = Colors.orangeAccent;
+            bg = widget.color2;
           }
-          if(timeleft == 0)
+          else if(timeleft == 0)
           {
             bg = Colors.green;
           }
@@ -233,7 +300,7 @@ class _TimerPageState extends State<TimerPage> {
       }
       else{
         timer.cancel();
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePage(c1: widget.color1,c2: widget.color2,)));
       }
     });
   }
@@ -256,12 +323,14 @@ class _TimerPageState extends State<TimerPage> {
 class WinningPage extends StatelessWidget{
   String player = "";
   int score = 0;
-  WinningPage(this.player,this.score,);
+  final Color player1_color;
+  final Color palyer2_color;
+  WinningPage(this.player,this.score,this.player1_color,this.palyer2_color);
   @override
   Widget build (BuildContext context)
   {
     return Scaffold(
-      backgroundColor: (player == "1")?Colors.blue:Colors.red,
+      backgroundColor: (player == "1")?player1_color:palyer2_color,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
