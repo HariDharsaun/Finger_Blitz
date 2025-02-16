@@ -12,13 +12,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
        debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
   }
 }
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,9 +27,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Color> colours= [Colors.amber,Colors.green,Colors.pinkAccent,Colors.blue,Colors.red,Colors.black,Colors.purpleAccent,Colors.deepPurple];
-  Color button_color1 = Colors.white70;
-  Color button_color2 = Colors.white70;
+  List<Color> colours= [Colors.amber,Colors.deepOrangeAccent,Colors.greenAccent,Colors.pinkAccent,Colors.blue,Colors.red,Colors.black,Colors.purpleAccent,Colors.deepPurple];
+  Color button_color1 = Colors.white;
+  Color button_color2 = Colors.white;
   bool p1_start = false;
   bool p2_start = false;
   Color selected = Colors.white;
@@ -40,17 +39,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 65, 122, 151), 
-        title:const  SafeArea(child: Text("Finger⚡Blitz",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 252, 203, 140)),)),
-        
-      ),
       body: Column(
         children: [
           Container(
             color: p1_color,
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 2-57,
+            height: MediaQuery.of(context).size.height / 2,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -83,15 +77,15 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     p1_start = true;
                     setState(() {
-                      button_color1 = Colors.amber;
+                      button_color1 = Colors.white70;
                     });
                     if(p1_start && p2_start)
                     {
                       p1_start = false;
                       p2_start = false;
                       setState(() {
-                        button_color1 = Colors.white70;
-                        button_color2 = Colors.white70;
+                        button_color1 = Colors.white;
+                        button_color2 = Colors.white;
                       });
                       Navigator.push(
                       context,
@@ -120,15 +114,15 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     p2_start  = true;
                     setState(() {
-                      button_color2 = Colors.blueGrey;
+                      button_color2 = Colors.white70;
                     });
                     if(p1_start && p2_start)
                     {
                       p1_start = false;
                       p2_start = false;
                       setState(() {
-                        button_color1 = Colors.white70;
-                        button_color2 = Colors.white70;
+                        button_color1 = Colors.white;
+                        button_color2 = Colors.white;
                       });
                       Navigator.push(
                       context,
@@ -336,14 +330,17 @@ class WinningPage extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Lottie.asset(
-                  'assets/winning.json',
-                  ),
-                  Text("You Won",style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),)
-                ],
+              child: SizedBox(
+                height: 550,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Lottie.asset(
+                    'assets/winning.json',
+                    ),
+                    Text("You Won",style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
+                  ],
+                ),
               ),
             ),
             Text("Score : $score",style: const TextStyle(fontSize: 30,fontWeight: FontWeight.w400),),
