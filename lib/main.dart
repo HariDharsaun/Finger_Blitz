@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,9 +12,58 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
        debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: SplashScreen(),
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget{
+  const SplashScreen({super.key});
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  void initState(){
+    super.initState();
+    // Timer(Duration(seconds: 1),(){
+    //   setState(() {
+    //     showanimation = true;
+    //   });
+    // });
+    Timer(Duration(seconds: 3),(){
+      Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          color: Colors.black
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("FingerBlitzz" , style: GoogleFonts.oxanium(fontSize: 40,fontWeight: FontWeight.bold, color: Colors.amber),),
+            SizedBox(height: 80,),
+            Lottie.asset("assets/loading.json",width: 180,
+            delegates: LottieDelegates(
+            values: [
+                    ValueDelegate.color(
+            const ['**'],
+                    value: Colors.white, 
+                    ),
+                  ],
+                  ),),
+            ]
+        ),
+      ),
     );
   }
 }
@@ -27,7 +76,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Color> colours= [Colors.amber,Colors.deepOrangeAccent,Colors.greenAccent,Colors.pinkAccent,Colors.blue,Colors.red,Colors.black,Colors.purpleAccent,Colors.deepPurple];
+  List<Color> colours= [Colors.blue,Colors.red,Colors.amber,Colors.orange,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
   Color button_color1 = Colors.white;
   Color button_color2 = Colors.white;
   bool p1_start = false;
@@ -50,6 +99,10 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   PopupMenuButton<Color>(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)
+                    ),
+                    color: Colors.black54,
                   icon: Icon(Icons.color_lens_rounded,color: palatte_color,size:35,),
                   onSelected: (Color color){
                     setState(() {
@@ -93,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   },
-                  child: Text("Start",style: TextStyle(color: p1_color,fontSize: 20,fontWeight: FontWeight.bold),),
+                  child: Text("Start",style: GoogleFonts.rajdhani(color: p1_color,fontSize: 25,fontWeight: FontWeight.w600),),
                   color: button_color1,
                   shape: const CircleBorder(),
                   height: 150,
@@ -130,13 +183,17 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   },
-                  child: Text("Start",style: TextStyle(color: p2_color,fontSize: 20,fontWeight: FontWeight.bold)),
+                  child: Text("Start",style: GoogleFonts.rajdhani(color: p2_color,fontSize: 25,fontWeight: FontWeight.w600)),
                   color: button_color2,
                   shape: const CircleBorder(),
                   height: 150,
                   minWidth: 150,
                 ),
                 PopupMenuButton<Color>(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)
+                    ),
+                    color: Colors.black54,
                   icon: Icon(Icons.color_lens_rounded,color: palatte_color,size:35,),
                   onSelected: (Color color){
                     setState(() {
@@ -219,9 +276,9 @@ class _GamePageState extends State<GamePage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text("Player-1",style: TextStyle(fontSize: 25),)
+                    child: Text("Player-1",style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600),)
                     ),
-                  Text(p1_score.toString(),style: TextStyle(fontSize: 30))
+                  Text(p1_score.toString(),style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600))
                 ],
               ),
             ),
@@ -249,8 +306,8 @@ class _GamePageState extends State<GamePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: TextStyle(fontSize: 30),)),
-                  Transform.rotate(angle: 3.14,child: Text("Player-2",style: TextStyle(fontSize: 25)))
+                  Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600),)),
+                  Transform.rotate(angle: 3.14,child: Text("Player-2",style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600)))
                 ],
               ),
             ),
@@ -271,7 +328,7 @@ class TimerPage extends StatefulWidget{
 
 class _TimerPageState extends State<TimerPage> {
   int timeleft = 3;
-  Color bg = Colors.cyanAccent;
+  Color bg = Colors.cyan;
   void initState(){
     Timer.periodic(Duration(seconds: 1), (timer){
       if(timeleft > 0)
@@ -306,7 +363,7 @@ class _TimerPageState extends State<TimerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text((timeleft.toString()) == '0'?"Let's Battle":timeleft.toString(),style: TextStyle(color: Colors.white,fontSize: 60),),
+            Text((timeleft.toString()) == '0'?"Let's Battle":timeleft.toString(),style: GoogleFonts.rajdhani(color: Colors.white,fontSize: 65,fontWeight: FontWeight.bold),),
           ],
         ),
       ),
@@ -338,12 +395,12 @@ class WinningPage extends StatelessWidget{
                     Lottie.asset(
                     'assets/winning.json',
                     ),
-                    Text("You Won",style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold),),
+                    Text("You Won",style: GoogleFonts.bangers(fontSize: 60,fontWeight: FontWeight.bold),),
                   ],
                 ),
               ),
             ),
-            Text("Score : $score",style: const TextStyle(fontSize: 30,fontWeight: FontWeight.w400),),
+            Text("Score : $score",style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w700),),
             Padding(
               padding: const EdgeInsets.all(15),
               child: MaterialButton(
@@ -353,7 +410,7 @@ class WinningPage extends StatelessWidget{
                 Navigator.pop(context);
               },
               color: Colors.blueGrey,
-              child: const Text("Restart",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+              child: Text("Restart",style: GoogleFonts.rajdhani(fontSize: 15,fontWeight: FontWeight.bold),),
               ),
             )
           ],
