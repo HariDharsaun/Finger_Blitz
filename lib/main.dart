@@ -93,7 +93,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Color> colours= [Colors.blue,Colors.red,Colors.amber,Colors.deepOrange,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
+  List<Color> colours= [Colors.blue,Colors.red,Colors.amberAccent,Colors.deepOrange,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
   Color button_color1 = Colors.white;
   Color button_color2 = Colors.white;
   bool p1_start = false;
@@ -263,6 +263,8 @@ class _GamePageState extends State<GamePage> {
   double p2_height = 0;
   int p1_score = 0;
   int p2_score = 0;
+  int p1_taps = 0;
+  int p2_taps = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -279,13 +281,15 @@ class _GamePageState extends State<GamePage> {
             padding: const EdgeInsets.all(0),
             onPressed: (){
               setState(() {
+                p1_taps += 1;
                 p1_height += 30;
                 p2_height -= 30;
-                p1_score += 10;
+                p1_score += 12;
               });
               if(p1_height > MediaQuery.of(context).size.height-60)
                 {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score,widget.c1,widget.c2)));
+                  print(p1_taps);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score,widget.c1,widget.c2,p1_taps)));
                 }
             },
             child: Container(
@@ -307,14 +311,15 @@ class _GamePageState extends State<GamePage> {
           MaterialButton(
             padding: const EdgeInsets.all(0),
             onPressed: (){
+                p2_taps += 1;
                 setState(() {
                   p2_height += 30;
                   p1_height -= 30;
-                  p2_score += 10;
+                  p2_score += 12;
                 });
                 if(p2_height > MediaQuery.of(context).size.height-60)
                 {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score,widget.c1,widget.c2)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score,widget.c1,widget.c2,p2_taps)));
                 }
             },
             child: Container(
@@ -397,7 +402,8 @@ class WinningPage extends StatefulWidget{
   int score = 0;
   final Color player1_color;
   final Color palyer2_color;
-  WinningPage(this.player,this.score,this.player1_color,this.palyer2_color, {super.key});
+  final int taps;
+  WinningPage(this.player,this.score,this.player1_color,this.palyer2_color,this.taps,{super.key});
 
   @override
   State<WinningPage> createState() => _WinningPageState();
@@ -405,7 +411,7 @@ class WinningPage extends StatefulWidget{
 
 class _WinningPageState extends State<WinningPage>with SingleTickerProviderStateMixin {
   late AnimationController winning_controller;
-
+  final Color board_text = Colors.amber;
   @override
   void initState(){
     super.initState();
@@ -446,7 +452,22 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
                 ),
               ),
             ),
-            Text("Score : ${widget.score}",style: const TextStyle(fontFamily: 'Rajdhani',fontSize: 30,fontWeight: FontWeight.bold),),
+            Container(
+              padding: const EdgeInsets.all(10),
+              width: MediaQuery.of(context).size.width/2,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Text("Score Board",style: TextStyle(fontFamily: 'Oxanium',fontSize: 30,fontWeight: FontWeight.bold,color: board_text),),
+                  Text("Score : ${widget.score}",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 20,fontWeight: FontWeight.w600,color: board_text),),
+                  Text("No of taps : ${widget.taps}",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 20,fontWeight: FontWeight.w600,color: board_text),)
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(15),
               child: MaterialButton(
@@ -456,7 +477,7 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
                 Navigator.pop(context);
               },
               color: Colors.blueGrey,
-              child: const Text("Restart",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 15,fontWeight: FontWeight.bold),),
+              child: const Text("Restart",style: TextStyle(fontFamily: 'Oxanium',fontSize: 15,fontWeight: FontWeight.bold,),),
               ),
             )
           ],
