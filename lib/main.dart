@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/animation.dart';
 
-void main() {
+void main(){
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }
 
@@ -25,18 +26,30 @@ class SplashScreen extends StatefulWidget{
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
+  late  AnimationController _controller;
+
   void initState(){
     super.initState();
-    // Timer(Duration(seconds: 1),(){
-    //   setState(() {
-    //     showanimation = true;
-    //   });
-    // });
-    Timer(Duration(seconds: 3),(){
-      Navigator.push(context,MaterialPageRoute(builder: (context)=>HomePage()));
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 3),
+      );
+
+      _controller.forward();
+    
+    Future.delayed(Duration(seconds: 3), () {
+      _controller.stop();
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
     });
   }
+  @override
+  void dispose(){
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,9 +63,13 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("FingerBlitzz" , style: GoogleFonts.oxanium(fontSize: 40,fontWeight: FontWeight.bold, color: Colors.amber),),
-            SizedBox(height: 80,),
+            const Text("FingerBlitzz" , style: TextStyle(fontFamily: 'Oxanium',fontSize: 40,fontWeight: FontWeight.bold, color: Colors.amber),),
+            const SizedBox(height: 80,),
             Lottie.asset("assets/loading.json",width: 180,
+            controller: _controller,
+            onLoaded:(composition){
+              _controller.duration=composition.duration;
+            },
             delegates: LottieDelegates(
             values: [
                     ValueDelegate.color(
@@ -76,7 +93,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Color> colours= [Colors.blue,Colors.red,Colors.amber,Colors.orange,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
+  List<Color> colours= [Colors.blue,Colors.red,Colors.amber,Colors.deepOrange,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
   Color button_color1 = Colors.white;
   Color button_color2 = Colors.white;
   bool p1_start = false;
@@ -136,9 +153,11 @@ class _HomePageState extends State<HomePage> {
                     {
                       p1_start = false;
                       p2_start = false;
-                      setState(() {
+                      Future.delayed(Duration(milliseconds: 100),(){
+                        setState(() {
                         button_color1 = Colors.white;
                         button_color2 = Colors.white;
+                      });
                       });
                       Navigator.push(
                       context,
@@ -146,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   },
-                  child: Text("Start",style: GoogleFonts.rajdhani(color: p1_color,fontSize: 25,fontWeight: FontWeight.w600),),
+                  child: Text("Start",style: TextStyle(fontFamily: 'Rajdhani',color: p1_color,fontSize: 25,fontWeight: FontWeight.w600),),
                   color: button_color1,
                   shape: const CircleBorder(),
                   height: 150,
@@ -173,9 +192,11 @@ class _HomePageState extends State<HomePage> {
                     {
                       p1_start = false;
                       p2_start = false;
+                      Future.delayed(const Duration(milliseconds: 100),(){
                       setState(() {
                         button_color1 = Colors.white;
                         button_color2 = Colors.white;
+                        });
                       });
                       Navigator.push(
                       context,
@@ -183,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   },
-                  child: Text("Start",style: GoogleFonts.rajdhani(color: p2_color,fontSize: 25,fontWeight: FontWeight.w600)),
+                  child: Text("Start",style: TextStyle(fontFamily:'Rajdhani',color: p2_color,fontSize: 25,fontWeight: FontWeight.w600)),
                   color: button_color2,
                   shape: const CircleBorder(),
                   height: 150,
@@ -255,7 +276,7 @@ class _GamePageState extends State<GamePage> {
       body: Column(
         children: [
           MaterialButton(
-            padding: EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
             onPressed: (){
               setState(() {
                 p1_height += 30;
@@ -268,7 +289,7 @@ class _GamePageState extends State<GamePage> {
                 }
             },
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               color: widget.c1,
               width: double.infinity,
               height: p1_height,
@@ -276,17 +297,16 @@ class _GamePageState extends State<GamePage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text("Player-1",style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600),)
+                    child: Text("Player-1",style: TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)
                     ),
-                  Text(p1_score.toString(),style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600))
+                  Text(p1_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600))
                 ],
               ),
             ),
           ),
           MaterialButton(
-            padding: EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
             onPressed: (){
-              print(MediaQuery.of(context).size.height);
                 setState(() {
                   p2_height += 30;
                   p1_height -= 30;
@@ -298,7 +318,7 @@ class _GamePageState extends State<GamePage> {
                 }
             },
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               color: widget.c2,
               width: double.infinity,
               height: p2_height,
@@ -306,8 +326,8 @@ class _GamePageState extends State<GamePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600),)),
-                  Transform.rotate(angle: 3.14,child: Text("Player-2",style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w600)))
+                  Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)),
+                  Transform.rotate(angle: 3.14,child: const Text("Player-2",style:TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600)))
                 ],
               ),
             ),
@@ -330,7 +350,8 @@ class _TimerPageState extends State<TimerPage> {
   int timeleft = 3;
   Color bg = Colors.cyan;
   void initState(){
-    Timer.periodic(Duration(seconds: 1), (timer){
+    super.initState();
+    Timer.periodic(const Duration(seconds: 1), (timer){
       if(timeleft > 0)
       {
         setState(() {
@@ -351,7 +372,7 @@ class _TimerPageState extends State<TimerPage> {
       }
       else{
         timer.cancel();
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>GamePage(c1: widget.color1,c2: widget.color2,)));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>GamePage(c1: widget.color1,c2: widget.color2,)));
       }
     });
   }
@@ -363,7 +384,7 @@ class _TimerPageState extends State<TimerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text((timeleft.toString()) == '0'?"Let's Battle":timeleft.toString(),style: GoogleFonts.rajdhani(color: Colors.white,fontSize: 65,fontWeight: FontWeight.bold),),
+            Text((timeleft.toString()) == '0'?"Let's Battle":timeleft.toString(),style: TextStyle(fontFamily:'Rajdhani',color: Colors.white,fontSize: 65,fontWeight: FontWeight.bold),),
           ],
         ),
       ),
@@ -371,17 +392,39 @@ class _TimerPageState extends State<TimerPage> {
   }
 }
 
-class WinningPage extends StatelessWidget{
+class WinningPage extends StatefulWidget{
   String player = "";
   int score = 0;
   final Color player1_color;
   final Color palyer2_color;
-  WinningPage(this.player,this.score,this.player1_color,this.palyer2_color);
+  WinningPage(this.player,this.score,this.player1_color,this.palyer2_color, {super.key});
+
+  @override
+  State<WinningPage> createState() => _WinningPageState();
+}
+
+class _WinningPageState extends State<WinningPage>with SingleTickerProviderStateMixin {
+  late AnimationController winning_controller;
+
+  @override
+  void initState(){
+    super.initState();
+    winning_controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 3)
+    );
+    winning_controller.repeat();
+  }
+  @override
+  void dispose(){
+    winning_controller.dispose();
+    super.dispose();
+  }
   @override
   Widget build (BuildContext context)
   {
     return Scaffold(
-      backgroundColor: (player == "1")?player1_color:palyer2_color,
+      backgroundColor: (widget.player == "1")?widget.player1_color:widget.palyer2_color,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -394,23 +437,26 @@ class WinningPage extends StatelessWidget{
                   children: [
                     Lottie.asset(
                     'assets/winning.json',
+                    onLoaded: (composition){
+                      winning_controller.duration = composition.duration;
+                    }
                     ),
-                    Text("You Won",style: GoogleFonts.bangers(fontSize: 60,fontWeight: FontWeight.bold),),
+                    const Text("You Won",style: TextStyle(fontFamily:'Bangers',fontSize: 60,fontWeight: FontWeight.bold),),
                   ],
                 ),
               ),
             ),
-            Text("Score : $score",style: GoogleFonts.rajdhani(fontSize: 30,fontWeight: FontWeight.w700),),
+            Text("Score : ${widget.score}",style: const TextStyle(fontFamily: 'Rajdhani',fontSize: 30,fontWeight: FontWeight.bold),),
             Padding(
               padding: const EdgeInsets.all(15),
               child: MaterialButton(
                 onPressed: (){
-                Navigator.pop(context);
+                  winning_controller.stop();
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
               color: Colors.blueGrey,
-              child: Text("Restart",style: GoogleFonts.rajdhani(fontSize: 15,fontWeight: FontWeight.bold),),
+              child: const Text("Restart",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 15,fontWeight: FontWeight.bold),),
               ),
             )
           ],
