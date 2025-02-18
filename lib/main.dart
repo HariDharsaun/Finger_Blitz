@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/animation.dart';
+import 'dart:math';
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,27 +28,14 @@ class SplashScreen extends StatefulWidget{
 }
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
-  late  AnimationController _controller;
 
   void initState(){
     super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 3),
-      );
-
-      _controller.forward();
     
     Future.delayed(Duration(seconds: 3), () {
-      _controller.stop();
+      // _controller.stop();
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
     });
-  }
-  @override
-  void dispose(){
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -66,10 +54,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             const Text("FingerBlitzz" , style: TextStyle(fontFamily: 'Oxanium',fontSize: 40,fontWeight: FontWeight.bold, color: Colors.amber),),
             const SizedBox(height: 80,),
             Lottie.asset("assets/loading.json",width: 180,
-            controller: _controller,
-            onLoaded:(composition){
-              _controller.duration=composition.duration;
-            },
             delegates: LottieDelegates(
             values: [
                     ValueDelegate.color(
@@ -93,7 +77,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Color> colours= [Colors.blue,Colors.red,Colors.amberAccent,Colors.deepOrange,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
+  List<Color> colours= [Colors.blue,Colors.red,Colors.amberAccent,Colors.deepOrangeAccent,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
   Color button_color1 = Colors.white;
   Color button_color2 = Colors.white;
   bool p1_start = false;
@@ -274,70 +258,72 @@ class _GamePageState extends State<GamePage> {
       p2_height = MediaQuery.of(context).size.height / 2;
       flag = true;
     }
-    return Scaffold(
-      body: Column(
-        children: [
-          MaterialButton(
-            padding: const EdgeInsets.all(0),
-            onPressed: (){
-              setState(() {
-                p1_taps += 1;
-                p1_height += 30;
-                p2_height -= 30;
-                p1_score += 12;
-              });
-              if(p1_height > MediaQuery.of(context).size.height-60)
-                {
-                  print(p1_taps);
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score,widget.c1,widget.c2,p1_taps)));
-                }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              color: widget.c1,
-              width: double.infinity,
-              height: p1_height,
-              alignment: Alignment.topRight,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text("Player-1",style: TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)
-                    ),
-                  Text(p1_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600))
-                ],
-              ),
-            ),
-          ),
-          MaterialButton(
-            padding: const EdgeInsets.all(0),
-            onPressed: (){
-                p2_taps += 1;
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            MaterialButton(
+              padding: const EdgeInsets.all(0),
+              onPressed: (){
                 setState(() {
-                  p2_height += 30;
-                  p1_height -= 30;
-                  p2_score += 12;
+                  p1_taps += 1;
+                  p1_height += 30;
+                  p2_height -= 30;
+                  p1_score += 12;
                 });
-                if(p2_height > MediaQuery.of(context).size.height-60)
-                {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score,widget.c1,widget.c2,p2_taps)));
-                }
-            },
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              color: widget.c2,
-              width: double.infinity,
-              height: p2_height,
-              alignment: Alignment.bottomRight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)),
-                  Transform.rotate(angle: 3.14,child: const Text("Player-2",style:TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600)))
-                ],
+                if(p1_height > MediaQuery.of(context).size.height-60)
+                  {
+                    print(p1_taps);
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score,widget.c1,widget.c2,p1_taps)));
+                  }
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                color: widget.c1,
+                width: double.infinity,
+                height: p1_height,
+                alignment: Alignment.topRight,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text("Player-1",style: TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)
+                      ),
+                    Text(p1_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600))
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            MaterialButton(
+              padding: const EdgeInsets.all(0),
+              onPressed: (){
+                  p2_taps += 1;
+                  setState(() {
+                    p2_height += 30;
+                    p1_height -= 30;
+                    p2_score += 12;
+                  });
+                  if(p2_height > MediaQuery.of(context).size.height-60)
+                  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score,widget.c1,widget.c2,p2_taps)));
+                  }
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                color: widget.c2,
+                width: double.infinity,
+                height: p2_height,
+                alignment: Alignment.bottomRight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)),
+                    Transform.rotate(angle: 3.14,child: const Text("Player-2",style:TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600)))
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -352,8 +338,11 @@ class TimerPage extends StatefulWidget{
 }
 
 class _TimerPageState extends State<TimerPage> {
+  List<String> quotes = ["Tap fast,the winner gets 1 crore!","Win, and the winner might get a GF / BF...","Tap fast, looser gets a break UP!","Winner will get a date with a cute girl/boy"];
   int timeleft = 3;
   Color bg = Colors.cyan;
+  Random random_index = Random();
+
   void initState(){
     super.initState();
     Timer.periodic(const Duration(seconds: 1), (timer){
@@ -389,7 +378,7 @@ class _TimerPageState extends State<TimerPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text((timeleft.toString()) == '0'?"Let's Battle":timeleft.toString(),style: TextStyle(fontFamily:'Rajdhani',color: Colors.white,fontSize: 65,fontWeight: FontWeight.bold),),
+            Text((timeleft.toString()) == '0'?"Let's Battle":timeleft.toString(),style: const TextStyle(fontFamily:'Rajdhani',color: Colors.white,fontSize: 50,fontWeight: FontWeight.bold),),
           ],
         ),
       ),
@@ -433,11 +422,11 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
       backgroundColor: (widget.player == "1")?widget.player1_color:widget.palyer2_color,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Center(
               child: SizedBox(
-                height: 550,
+                height: 500,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -452,32 +441,54 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              width: MediaQuery.of(context).size.width/2,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.black54,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Text("Score Board",style: TextStyle(fontFamily: 'Oxanium',fontSize: 30,fontWeight: FontWeight.bold,color: board_text),),
-                  Text("Score : ${widget.score}",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 20,fontWeight: FontWeight.w600,color: board_text),),
-                  Text("No of taps : ${widget.taps}",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 20,fontWeight: FontWeight.w600,color: board_text),)
-                ],
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [Container(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                width: MediaQuery.of(context).size.width*0.55,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.amberAccent,
+                  )
+                ),
+                child: Column(
+                  children: [
+                    Text("Score Board",style: TextStyle(fontFamily: 'Oxanium',fontSize: 30,fontWeight: FontWeight.bold,color: board_text),),
+                    Text("Score : ${widget.score}",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 20,fontWeight: FontWeight.w600,color: board_text),),
+                    Text("No of taps : ${widget.taps}",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 20,fontWeight: FontWeight.w600,color: board_text),)
+                  ],
+                ),
+              ),]
+            ),
+            const SizedBox(
+              height: 5,
             ),
             Padding(
-              padding: const EdgeInsets.all(15),
-              child: MaterialButton(
-                onPressed: (){
-                  winning_controller.stop();
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              color: Colors.blueGrey,
-              child: const Text("Restart",style: TextStyle(fontFamily: 'Oxanium',fontSize: 15,fontWeight: FontWeight.bold,),),
+              padding: const EdgeInsets.symmetric(vertical:10),
+              child: SizedBox(
+                width: 100,
+                child: MaterialButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  onPressed: (){
+                    winning_controller.stop();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                color: const Color.fromARGB(255, 114, 137, 148),
+                child:const  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Restart",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 15,fontWeight: FontWeight.bold),),
+                    SizedBox(width: 5,),
+                    Icon(Icons.restart_alt_sharp,color: Color.fromARGB(255, 233, 223, 130),),
+                  ]
+                ),
+                ),
               ),
             )
           ],
