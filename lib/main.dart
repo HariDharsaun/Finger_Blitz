@@ -257,72 +257,70 @@ class _GamePageState extends State<GamePage> {
       p2_height = MediaQuery.of(context).size.height / 2;
       flag = true;
     }
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            MaterialButton(
-              padding: const EdgeInsets.all(0),
-              onPressed: (){
+    return Scaffold(
+      body: Column(
+        children: [
+          MaterialButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: (){
+              setState(() {
+                p1_taps += 1;
+                p1_height += 30;
+                p2_height -= 30;
+                p1_score += 12;
+              });
+              if(p1_height > MediaQuery.of(context).size.height-60)
+                {
+                  print(p1_taps);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score,widget.c1,widget.c2,p1_taps)));
+                }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              color: widget.c1,
+              width: double.infinity,
+              height: p1_height,
+              alignment: Alignment.topRight,
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text("Player-1",style: TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)
+                    ),
+                  Text(p1_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600))
+                ],
+              ),
+            ),
+          ),
+          MaterialButton(
+            padding: const EdgeInsets.all(0),
+            onPressed: (){
+                p2_taps += 1;
                 setState(() {
-                  p1_taps += 1;
-                  p1_height += 30;
-                  p2_height -= 30;
-                  p1_score += 12;
+                  p2_height += 30;
+                  p1_height -= 30;
+                  p2_score += 12;
                 });
-                if(p1_height > MediaQuery.of(context).size.height-60)
-                  {
-                    print(p1_taps);
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("1",p1_score,widget.c1,widget.c2,p1_taps)));
-                  }
-              },
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                color: widget.c1,
-                width: double.infinity,
-                height: p1_height,
-                alignment: Alignment.topRight,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text("Player-1",style: TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)
-                      ),
-                    Text(p1_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600))
-                  ],
-                ),
+                if(p2_height > MediaQuery.of(context).size.height-60)
+                {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score,widget.c1,widget.c2,p2_taps)));
+                }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              color: widget.c2,
+              width: double.infinity,
+              height: p2_height,
+              alignment: Alignment.bottomRight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)),
+                  Transform.rotate(angle: 3.14,child: const Text("Player-2",style:TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600)))
+                ],
               ),
             ),
-            MaterialButton(
-              padding: const EdgeInsets.all(0),
-              onPressed: (){
-                  p2_taps += 1;
-                  setState(() {
-                    p2_height += 30;
-                    p1_height -= 30;
-                    p2_score += 12;
-                  });
-                  if(p2_height > MediaQuery.of(context).size.height-60)
-                  {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>WinningPage("2",p2_score,widget.c1,widget.c2,p2_taps)));
-                  }
-              },
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                color: widget.c2,
-                width: double.infinity,
-                height: p2_height,
-                alignment: Alignment.bottomRight,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Transform.rotate(angle:3.14,child: Text(p2_score.toString(),style: const TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600),)),
-                    Transform.rotate(angle: 3.14,child: const Text("Player-2",style:TextStyle(fontFamily:'Rajdhani',fontSize: 30,fontWeight: FontWeight.w600)))
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
