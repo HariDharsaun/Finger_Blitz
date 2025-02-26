@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/animation.dart';
-import 'dart:math';
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -341,8 +340,6 @@ class _TimerPageState extends State<TimerPage> {
   List<String> quotes = ["Tap fast,the winner gets 1 crore!","Win, and the winner might get a GF / BF...","Tap fast, looser gets a break UP!","Winner will get a date with a cute girl/boy"];
   int timeleft = 3;
   Color bg = Colors.cyan;
-  Random random_index = Random();
-
   void initState(){
     super.initState();
     Timer.periodic(const Duration(seconds: 1), (timer){
