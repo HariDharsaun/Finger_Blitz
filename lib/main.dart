@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/animation.dart';
+import 'package:carousel_slider/carousel_controller.dart';
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -76,7 +78,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Color> colours= [Colors.blue,Colors.red,Colors.amberAccent,Colors.deepOrangeAccent,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.deepPurpleAccent];
+  int initialPage = 3;
+  String button_text = "Start";
+  String button_text2 = "Start";
+  List<Color> colours= [Colors.blue,Colors.red,Colors.amberAccent,Colors.deepOrangeAccent,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.brown,Colors.teal,Colors.cyan];
   Color button_color1 = Colors.white;
   Color button_color2 = Colors.white;
   bool p1_start = false;
@@ -98,39 +103,55 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  PopupMenuButton<Color>(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: CarouselSlider( 
+                        options: CarouselOptions(
+                          initialPage: initialPage,
+                          enableInfiniteScroll: false,
+                          viewportFraction: 0.3,
+                          height: MediaQuery.of(context).size.width/10,
+                          enlargeCenterPage: true,
+                        ),
+                        items: colours.map((Color color,){
+                          return Builder(
+                            builder: (BuildContext context){
+                              return InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    if(color != p2_color)
+                                      {
+                                        p1_color = color;
+                                      }
+                                  });
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    borderRadius: BorderRadius.circular(30)
+                                  ),
+                                ),
+                              );
+                            }
+                          );
+                        }).toList()
+                      ),
                     ),
-                    color: Colors.black54,
-                  icon: Icon(Icons.color_lens_rounded,color: palatte_color,size:35,),
-                  onSelected: (Color color){
-                    setState(() {
-                      if(color != p2_color)
-                      {
-                        p1_color = color;
-                      }
-                    });
-                  },
-                  itemBuilder: (BuildContext context){
-                    return colours.map((Color colour)
-                    {
-                      return PopupMenuItem<Color>(
-                        value: colour,
-                        child: Container(
-                          width: double.infinity,
-                          height: 20,
-                          color: colour,
-                        )
-                        );
-                    }).toList();
-                  },
-                ),
+                  ),
                   MaterialButton(
                   onPressed: () {
                     p1_start = true;
                     setState(() {
                       button_color1 = Colors.white70;
+                      button_text = "I'm Ready";
                     });
                     if(p1_start && p2_start)
                     {
@@ -140,6 +161,8 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                         button_color1 = Colors.white;
                         button_color2 = Colors.white;
+                        button_text = "Start";
+                        button_text2 = "Start";
                       });
                       });
                       Navigator.push(
@@ -148,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   },
-                  child: Text("Start",style: TextStyle(fontFamily: 'Rajdhani',color: p1_color,fontSize: 25,fontWeight: FontWeight.w600),),
+                  child: Text(button_text,style: TextStyle(fontFamily: 'Rajdhani',color: p1_color,fontSize: 25,fontWeight: FontWeight.w600),),
                   color: button_color1,
                   shape: const CircleBorder(),
                   height: 150,
@@ -170,6 +193,7 @@ class _HomePageState extends State<HomePage> {
                     p2_start  = true;
                     setState(() {
                       button_color2 = Colors.white70;
+                      button_text2 = "I'm Ready";
                     });
                     if(p1_start && p2_start)
                     {
@@ -179,6 +203,8 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         button_color1 = Colors.white;
                         button_color2 = Colors.white;
+                        button_text = "Start";
+                        button_text2 = "Start";
                         });
                       });
                       Navigator.push(
@@ -187,40 +213,58 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   },
-                  child: Text("Start",style: TextStyle(fontFamily:'Rajdhani',color: p2_color,fontSize: 25,fontWeight: FontWeight.w600)),
+                  child: Transform.rotate(
+                    angle: 3.14,
+                    child: Text(button_text2,style: TextStyle(fontFamily:'Rajdhani',color: p2_color,fontSize: 25,fontWeight: FontWeight.w600))
+                    ),
                   color: button_color2,
                   shape: const CircleBorder(),
                   height: 150,
                   minWidth: 150,
                 ),
-                PopupMenuButton<Color>(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
+                Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: CarouselSlider( 
+                        options: CarouselOptions(
+                          initialPage: initialPage,
+                          enableInfiniteScroll: false,
+                          viewportFraction: 0.3,
+                          height: MediaQuery.of(context).size.width/10,
+                          enlargeCenterPage: true,
+                        ),
+                        items: colours.map((Color color,){
+                          return Builder(
+                            builder: (BuildContext context){
+                              return InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    if(color != p1_color)
+                                      {
+                                        p2_color = color;
+                                      }
+                                  });
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    borderRadius: BorderRadius.circular(30)
+                                  ),
+                                ),
+                              );
+                            }
+                          );
+                        }).toList()
+                      ),
                     ),
-                    color: Colors.black54,
-                  icon: Icon(Icons.color_lens_rounded,color: palatte_color,size:35,),
-                  onSelected: (Color color){
-                    setState(() {
-                      if(color != p1_color)
-                      {
-                        p2_color = color;
-                      }
-                    });
-                  },
-                  itemBuilder: (BuildContext context){
-                    return colours.map((Color colour)
-                    {
-                      return PopupMenuItem<Color>(
-                        value: colour,
-                        child: Container(
-                          width: double.infinity,
-                          height: 20,
-                          color: colour,
-                        )
-                        );
-                    }).toList();
-                  },
-                ),
+                  ),
                 ]
               ),
               
