@@ -78,10 +78,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int initialPage = 3;
   String button_text = "Start";
   String button_text2 = "Start";
-  List<Color> colours= [Colors.blue,Colors.red,Colors.amberAccent,Colors.deepOrangeAccent,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.brown,Colors.teal,Colors.cyan];
+  List<Color> colours= [Colors.blue,Colors.red,Colors.amberAccent,Colors.deepOrangeAccent,Colors.greenAccent,Colors.pink,Colors.deepPurple,Colors.brown,Colors.teal,Colors.cyan,Colors.indigo];
   Color button_color1 = Colors.white;
   Color button_color2 = Colors.white;
   bool p1_start = false;
@@ -90,6 +89,10 @@ class _HomePageState extends State<HomePage> {
   Color p1_color = Colors.blue;
   Color p2_color = Colors.red;
   Color palatte_color = Colors.white;
+  int selected_index1 = 0;
+  int selected_index2 = 1;
+  Color samecolor1 = Colors.white;
+  Color samecolor2 = Colors.white;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,30 +117,38 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: CarouselSlider( 
                         options: CarouselOptions(
-                          initialPage: initialPage,
+                          onPageChanged: (index, reason){
+                            setState(() {
+                              selected_index1 = index;
+                              if(colours[selected_index1] != p2_color)
+                              {
+                                p1_color = colours[selected_index1];
+                                samecolor1 = Colors.white;
+                              }
+                              else if(colours[selected_index1] == p2_color)
+                              {
+                                samecolor1 = Colors.black;
+                              }
+                            });
+                          },
+                          initialPage: selected_index1,
                           enableInfiniteScroll: false,
                           viewportFraction: 0.3,
-                          height: MediaQuery.of(context).size.width/10,
+                          height: (MediaQuery.of(context).size.height/2)/8,
                           enlargeCenterPage: true,
                         ),
                         items: colours.map((Color color,){
                           return Builder(
                             builder: (BuildContext context){
-                              return InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    if(color != p2_color)
-                                      {
-                                        p1_color = color;
-                                      }
-                                  });
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: color,
-                                    borderRadius: BorderRadius.circular(30)
-                                  ),
+                              return Container(
+                                margin: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: color,
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    width: selected_index1 == colours.indexOf(color)?2.5:0,
+                                    color: samecolor1
+                                  )
                                 ),
                               );
                             }
@@ -233,30 +244,38 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: CarouselSlider( 
                         options: CarouselOptions(
-                          initialPage: initialPage,
+                          initialPage: selected_index2,
                           enableInfiniteScroll: false,
                           viewportFraction: 0.3,
-                          height: MediaQuery.of(context).size.width/10,
+                          height: (MediaQuery.of(context).size.height/2)/8,
                           enlargeCenterPage: true,
+                          onPageChanged: (index,reason){
+                            setState(() {
+                              selected_index2 = index;
+                              if(colours[selected_index2] != p1_color)
+                              {
+                                p2_color = colours[selected_index2];
+                                samecolor2 = Colors.white;
+                              }
+                              else if(colours[selected_index2] == p1_color)
+                              {
+                                samecolor2 = Colors.black;
+                              }
+                            });
+                          },
                         ),
                         items: colours.map((Color color,){
                           return Builder(
                             builder: (BuildContext context){
-                              return InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    if(color != p1_color)
-                                      {
-                                        p2_color = color;
-                                      }
-                                  });
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: color,
-                                    borderRadius: BorderRadius.circular(30)
-                                  ),
+                              return Container(
+                                margin: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: color,
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    width: selected_index2 == colours.indexOf(color)?2.5 : 0,
+                                    color: samecolor2,
+                                  )
                                 ),
                               );
                             }
@@ -440,20 +459,34 @@ class WinningPage extends StatefulWidget{
 class _WinningPageState extends State<WinningPage>with SingleTickerProviderStateMixin {
   late AnimationController winning_controller;
   final Color board_text = Colors.amber;
+  
+  double dx = 1.5; 
+
+  void animation(){
+    setState(() {
+      dx = 0;
+      }
+    );
+  }
+
   @override
   void initState(){
     super.initState();
     winning_controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3)
+      duration: const Duration(seconds: 3)
     );
     winning_controller.repeat();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      animation();
+    });
   }
   @override
   void dispose(){
     winning_controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build (BuildContext context)
   {
@@ -482,7 +515,14 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [Container(
+              children: [AnimatedContainer(
+                duration: const Duration(seconds: 2),
+                curve: Curves.easeOutExpo,
+              transform: Matrix4.translationValues(
+                dx * MediaQuery.of(context).size.width,// Start from right
+                0,
+                0,
+              ),
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 width: MediaQuery.of(context).size.width*0.55,
                 alignment: Alignment.center,
@@ -490,7 +530,7 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: Colors.amberAccent,
+                    color: board_text,
                   )
                 ),
                 child: Column(
@@ -507,24 +547,32 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical:10),
-              child: SizedBox(
+              child: Container(
                 width: 100,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2,
+                    color: Colors.teal,
+                  ),
+                  borderRadius: BorderRadius.circular(20)
+                ),
                 child: MaterialButton(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
+                  elevation: 10,
                   onPressed: (){
                     winning_controller.stop();
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
-                color: const Color.fromARGB(255, 114, 137, 148),
+                color: const Color.fromARGB(255, 153, 255, 206),
                 child:const  Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Restart",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 15,fontWeight: FontWeight.bold),),
+                    Text("Restart",style: TextStyle(fontFamily: 'Rajdhani',fontSize: 15,fontWeight: FontWeight.bold,color: Colors.teal),),
                     SizedBox(width: 5,),
-                    Icon(Icons.restart_alt_sharp,color: Color.fromARGB(255, 233, 223, 130),),
+                    Icon(Icons.restart_alt_sharp,color: Colors.teal),
                   ]
                 ),
                 ),
