@@ -549,16 +549,13 @@ class _WinningPageState extends State<WinningPage>with SingleTickerProviderState
               padding: const EdgeInsets.symmetric(vertical:10),
               child: Container(
                 width: 100,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 2,
-                    color: Colors.teal,
-                  ),
-                  borderRadius: BorderRadius.circular(20)
-                ),
                 child: MaterialButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
+                    side:const  BorderSide(
+                      width: 2,
+                      color: Colors.teal,
+                    ),
                   ),
                   elevation: 10,
                   onPressed: (){
